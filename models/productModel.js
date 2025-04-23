@@ -1,15 +1,28 @@
 const mongoose = require('mongoose');
 
 const productSchema = mongoose.Schema({
-    image: String,
-    name: String,
-    price: Number,
+    image: {
+        type: String, // store image path as string
+        required: true,
+    },
+    name: {
+        type: String,
+        required: true,
+    },
+    price: {
+        type: Number,
+        required: true,
+    },
     discount: {
-        type: Array,
-        default: []
+        type: Number,
+        default: 0,
+    },
+    isNewArrival: {
+        type: Boolean,
+        default: false,
     },
     bgcolor: String,
-    panecolor: String,
+    panelcolor: String,
     textcolor: String,
 });
 
