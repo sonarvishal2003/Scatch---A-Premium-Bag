@@ -1,13 +1,22 @@
+const express = require('express');
 const mongoose = require('mongoose');
-const config = require('config');
-const dbgr = require('debug')('development:mongoose');
+const app = express();
+require('dotenv').config();
 
-mongoose.connect(config.get("MONGODB_URI"))
-    .then(() => {
-        dbgr("MongoDB connection successful");
-    })
-    .catch((err) => {
-        dbgr("MongoDB connection error:", err);
-    });
+// Middleware and routes...
+app.use(express.json());
 
-module.exports = mongoose.connection;
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => {
+  console.log('✅ MongoDB connected');
+  const PORT = process.env.PORT || 10000;
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+  });
+})
+.catch(err => {
+  console.error('❌ MongoDB connection error:', err);
+});
