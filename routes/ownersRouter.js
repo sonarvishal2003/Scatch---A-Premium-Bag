@@ -51,7 +51,7 @@ router.post('/owner-login', async (req, res) => {
 //  Admin Pages
 router.get('/admin',verifyAdmin , (req, res) => {
     let success = req.flash("success");
-    res.render("createProducts", { success });
+    res.render("createproducts", { success });
 });
 
 router.get('/admin/products',verifyAdmin, async (req, res) => {
