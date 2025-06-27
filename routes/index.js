@@ -2,6 +2,7 @@ const express = require('express');
 const isLoggedIn = require('../middlewares/isLoggedIn');
 const productModel = require('../models/productModel');
 const userModel = require('../models/userModel');
+const ownerModel = require('../models/ownerModel');
 const router = express.Router();
 const verifyAdmin = require('../middlewares/auth');
 
@@ -50,12 +51,33 @@ user.cart.forEach(item => {
 });
 
 router.get('/addtocart/:productid', isLoggedIn, async (req, res) => {
-    let user = await userModel.findOne({ email: req.user.email });
-    user.cart.push(req.params.productid);
-    await user.save();
-    req.flash("success", "Product added to cart");
-    res.redirect('/shop');
+    try {
+        if (!req.user || !req.user.email) {
+            req.flash("error", "User not authenticated");
+            return res.redirect('/');
+        }
+
+        let user = await userModel.findOne({ email: req.user.email });
+
+        if (!user) {
+            req.flash("error", "User not found in database");
+            return res.redirect('/');
+        }
+
+        user.cart.push(req.params.productid);
+        await user.save();
+
+        req.flash("success", "Product added to cart");
+        res.redirect('/shop');
+
+    } catch (err) {
+        console.error("Error in /addtocart route:", err);
+        req.flash("error", "Something went wrong while adding to cart");
+        res.redirect('/shop');
+    }
 });
+
+
 
 router.get('/removefromcart/:productid', isLoggedIn, async (req, res) => {
     let user = await userModel.findOne({ email: req.user.email });

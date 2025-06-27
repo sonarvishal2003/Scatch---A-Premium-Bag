@@ -64,14 +64,14 @@ module.exports.loginUser = async (req, res) => {
             role: isOwnerLogin ? 'admin' : 'user',
         });
 
-        // ✅ Set JWT in cookie for development
+        //  Set JWT in cookie for development
         res.cookie("token", token, {
             httpOnly: true,
             sameSite: "Lax", // Prevents CSRF in most cases
             // secure: false // not needed in development
         });
 
-        // ✅ Redirect to appropriate dashboard
+        //  Redirect to appropriate dashboard
         return res.redirect(isOwnerLogin ? "/owners/admin" : "/shop");
 
     } catch (err) {

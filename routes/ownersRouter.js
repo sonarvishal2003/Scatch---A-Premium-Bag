@@ -8,7 +8,7 @@ const verifyAdmin = require('../middlewares/auth');
 
 const secret = "jsknkjsvnkjsnjnsn"; 
 
-// ✅ Create owner only in development
+//  Create owner only in development
 if (process.env.NODE_ENV === "development") {
     router.post('/create', async (req, res) => {
         let owners = await ownerModel.find();
@@ -30,7 +30,7 @@ if (process.env.NODE_ENV === "development") {
     });
 }
 
-// ✅ Admin Login Route
+//  Admin Login Route
 router.post('/owner-login', async (req, res) => {
     const { email, password } = req.body;
 
@@ -48,7 +48,7 @@ router.post('/owner-login', async (req, res) => {
     res.status(200).json({ message: "Login successful", token });
 });
 
-// ✅ Admin Pages
+//  Admin Pages
 router.get('/admin',verifyAdmin , (req, res) => {
     let success = req.flash("success");
     res.render("createProducts", { success });
@@ -72,5 +72,5 @@ router.get('/admin/delete-all', async (req, res) => {
     res.redirect('/owners/admin/products');
 });
 
-// ✅ Final single export
+//  Final single export
 module.exports = router;
